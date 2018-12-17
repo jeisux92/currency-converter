@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import Calculator from "./components/calculator/Calculator";
-import Worker from 'worker-loader!./Worker.js';
+
 
 class App extends Component {
   render() {
