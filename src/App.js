@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
-import './App.css';
-import Header from './components/header/Header';
-import Calculator from './components/Calculator';
+import React, { Component } from "react";
+import "./App.css";
+import Calculator from "./components/calculator/Calculator";
+import Worker from 'worker-loader!./Worker.js';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <Header/>
-        <Calculator/>
+      <div className="App container">
+        <div className="row mt-5 jumbotron">
+          <Calculator/>
+        </div>
       </div>
     );
   }
