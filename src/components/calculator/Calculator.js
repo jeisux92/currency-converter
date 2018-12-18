@@ -1,64 +1,82 @@
-import React, { Component } from 'react'
-import './Calculator.scss'
-import WebWorker from '../../core/worker.setup'
-import Worker from '../../core/currency.worker.js'
+import React, { Component } from "react";
+import "./Calculator.scss";
+import WebWorker from "../../core/worker.setup";
+import Worker from "../../core/currency.worker.js";
 
 class Calculator extends Component {
-  constructor () {
-    super()
+  constructor() {
+    super();
     this.state = {
-      value: '',
-      currentCurrency: '',
+      value: "",
+      currentCurrency: "",
       rate: 0
-    }
-    this.worker = new WebWorker(Worker)
+    };
+    this.worker = new WebWorker(Worker);
   }
   calculate = e => {
-    let rate = this.state.rate
+    var regex = /^\d+(\.\d{1,4})?$/g;
+    var match = regex.test(this.state.currentCurrency);
+    if (!match) {
+      this.setState({
+        error: "Format not valid",
+        value: ""
+      });
+      return;
+    }
+
+    let rate = this.state.rate;
     if (!rate) {
+      this.setState({
+        error: "There is not connection",
+        value: ""
+      });
     } else {
       this.setState({
-        value: rate * Number(this.state.currentCurrency)
-      })
+        value: `U$${rate * Number(this.state.currentCurrency)}`,
+        error: ""
+      });
     }
-    console.log("Connection lost");
-  }
+  };
   handleInput = e => {
     this.setState({
       currentCurrency: e.target.value
-    })
-  }
+    });
+  };
 
-  componentWillMount () {
+  componentWillMount() {
     this.worker.onmessage = e => {
-      this.setState({ rate: e.data.USD })
-    }
+      this.setState({ rate: e.data.USD });
+    };
   }
-  render () {
+  render() {
     return (
-      <div className='col-sm-12'>
-        <div className='center-block'>
-          <div className='row'>
-            <div className='col-sm-6 mt-2'>
+      <div className="col-sm-12">
+        <div className="center-block">
+          <div className="row form">
+            <div className="col-sm-6 mt-2">
               <input
-                className='form-control form-control-sm text-center'
-                placeholder='UE'
+                className="form-control form-control-sm text-center"
+                placeholder="UE"
+                value={this.state.currentCurrency}
                 onChange={this.handleInput}
               />
+              <label className={this.state.error ? "error" : ""}>
+                {this.state.error}
+              </label>
             </div>
-            <div className='col-sm-6 mt-2'>
+            <div className="col-sm-6 mt-2">
               <input
-                className='form-control form-control-sm text-center'
-                readOnly='readonly'
+                className="form-control form-control-sm text-center"
+                readOnly="readonly"
                 value={this.state.value}
-                placeholder='USD'
+                placeholder="USD"
               />
             </div>
           </div>
-          <div className='row mt-5'>
-            <div className='col-md-12'>
+          <div className="row mt-5">
+            <div className="col-md-12">
               <button
-                className='btn btn-sm btn-primary'
+                className="btn btn-sm btn-primary"
                 onClick={this.calculate}
               >
                 CALCULATE
@@ -67,8 +85,8 @@ class Calculator extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Calculator
+export default Calculator;
