@@ -32,7 +32,7 @@ class Calculator extends Component {
       });
     } else {
       this.setState({
-        value: `U$${rate * Number(this.state.currentCurrency)}`,
+        value: `$USD ${rate * Number(this.state.currentCurrency)}`,
         error: ""
       });
     }
