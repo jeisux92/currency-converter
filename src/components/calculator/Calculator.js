@@ -45,7 +45,7 @@ class Calculator extends Component {
   }
   handleInput = e => {
     this.setState({
-      currentCurrency: (e.target.value).format(4)
+      currentCurrency: e.target.value
     })
   }
 
